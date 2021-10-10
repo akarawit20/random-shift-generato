@@ -3,7 +3,7 @@ from numpy import loadtxt
 import csv
 
 print('\n=== Welcome to Random-Shift-Generator ===\n')
-
+#s
 #import input token
 file = open('input_token.csv')
 input_token = loadtxt(file, delimiter = ",")
