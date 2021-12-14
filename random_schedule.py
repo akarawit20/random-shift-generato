@@ -2,6 +2,7 @@ import numpy as np
 from numpy import loadtxt
 import csv
 from tqdm import tqdm
+
 print('\n=== Welcome to Random-Shift-Generator ===\n')
 
 #import input token
@@ -9,12 +10,11 @@ file = open('input_token.csv')
 input_token = loadtxt(file, delimiter = ",")
 
 #insert parameters
-calandar = 'WWWWWHHWWWWWHHWWWWWHHWWWWWHHWWWWWHH'
-person_per_day = 4
+calandar = 'WWWWWHHHWW'
+person_per_day = 5
 weekday_interval = 2
 holiday_interval = 2
 
-# calandar = WWWWWHHWWWWWHHWWWWWHHWWWWWHHWWWWWHH
 #generate random
 def Generate_random(input_token, weekday_interval, holiday_interval):
 	token=np.array(input_token)
@@ -23,7 +23,7 @@ def Generate_random(input_token, weekday_interval, holiday_interval):
 	for day in calandar:
 		today_shift = np.array([])
 		if  day == 'W': #day=weekday
-			for t in [1,1,2,2]:
+			for t in [1]*person_per_day:
 				filtered_token = token[token[:,t]>0] #filter out available day = 0
 				filtered_token = filtered_token[np.invert(np.isin(filtered_token[:,0], today_shift))] #filter out choosen person
 				filtered_token = filtered_token[np.invert(np.isin(filtered_token[:,0], calander_filled[-weekday_interval:]))] #filter out consecutive shift
@@ -31,7 +31,7 @@ def Generate_random(input_token, weekday_interval, holiday_interval):
 				today_shift = np.append(today_shift, selected_person_num)
 				token[int(selected_person_num-1)][t] -= 1
 		elif day == 'H': #day=holiday
-			for t in [3,3,4,4]:
+			for t in [2]*person_per_day:
 				filtered_token = token[token[:,t]>0] #filter out available day = 0
 				filtered_token = filtered_token[np.invert(np.isin(filtered_token[:,0], today_shift))] #filter out choosen person
 				filtered_token = filtered_token[np.invert(np.isin(filtered_token[:,0], calander_filled[-holiday_interval:]))] #filter out consecutive shift
